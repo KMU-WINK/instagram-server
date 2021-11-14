@@ -7,7 +7,7 @@ module.exports = {
         email:"hpyho33@kookmin.ac.kr",
         password:"test",
         userName:"ChanHHOO",
-        progileImg:"https://asdasd.com",
+        profileImg:"https://asdasd.com",
         articleCount:1,
         followerCount:11,
         followCount:111,

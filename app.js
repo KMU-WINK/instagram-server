@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-const login = require('./routes/login');
+const login = require('./routes/user');
 const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());

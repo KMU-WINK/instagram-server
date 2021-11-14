@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     userName: DataTypes.STRING,
-    progileImg: DataTypes.STRING,
+    profileImg: DataTypes.STRING,
     articleCount: DataTypes.INTEGER,
     followerCount: DataTypes.INTEGER,
     followCount: DataTypes.INTEGER,
