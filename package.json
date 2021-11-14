@@ -5,10 +5,17 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "cliapp": "^1.1.4",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "global": "^4.4.0",
     "jsonwebtoken": "^8.5.1",
-    "passport": "^0.5.0",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "mysql2": "^2.3.3-rc.0",
+    "sequelize": "^6.9.0",
+    "sequelize-cli": "^6.3.0",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
