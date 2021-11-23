@@ -12,14 +12,10 @@ const initialData = {
     password:"test",
     userName:"test",
     profileImg:"https://asdasd.com",
-    articleCount:1,
-    followerCount:11,
-    followCount:111,
     nickName:"test",
-    webSite:"https://veloper.com",
     description:"test",
     phoneNumber:"010-1234-6789",
-    sex:"male",
+    private:false,
 }
 
 router.get("/test", function(req, res, next){
@@ -27,9 +23,7 @@ router.get("/test", function(req, res, next){
     let decoded = null
     console.log(token)
     if(token){
-        console.log(22)
         decoded = jwt.verify(token, secretObj.secret);
-        console.log(11)
     }
 
     if(decoded){
@@ -49,19 +43,31 @@ router.get("/login", function(req, res, next){
         expiresIn:"5m"
     })
 
-    models.user.findAll({
+    models.user.findOne({
         where:{
             email:"hpyho33@kookmin.ac.kr"
         }
     })
     .then(user => {
-        if(user[0].dataValues.password=== "test"){
+        if (!user){
+            return res.status(403).json({
+                loginSuccess:false,
+                message:"이메일이 없어요",
+            });
+        }
+        if(user.dataValues.password=== "test"){
             res.cookie("user", token);
             res.json({
                 token:token
             })
         }
     })
+    .catch(err => {
+        res.status(500);
+    })
+});
+router.get("/logout", function(req, res, next){
+    return res.cookie("user", "").json({logoutSuccess:true})
 })
 
 router.get("/signup", function(req, res, next){
@@ -70,14 +76,10 @@ router.get("/signup", function(req, res, next){
         password,
         userName,
         profileImg,
-        articleCount,
-        followerCount,
-        followCount,
         nickName,
-        webSite,
         description,
         phoneNumber,
-        sex
+        private,
     } = req.body || initialData;
 
     models.user.create({
@@ -85,22 +87,18 @@ router.get("/signup", function(req, res, next){
         password:password,
         userName:userName,
         profileImg:profileImg,
-        articleCount:articleCount,
-        followerCount:followerCount,
-        followCount:followCount,
         nickName:nickName,
-        webSite:webSite,
         description:description,
         phoneNumber:phoneNumber,
-        sex:sex,
         createdAt:new Date(),
         updatedAt:new Date(),
+        private:private,
     })
     .then((user)=>{
-        res.send(user.nickName+"님"+"가입을 축하드립니다!")
+        res.send(200)
     })
     .catch((err)=>{
-        res.send("please data")
+        res.send(403)
     })
 })
 

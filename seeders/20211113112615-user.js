@@ -8,16 +8,11 @@ module.exports = {
         password:"test",
         userName:"ChanHHOO",
         profileImg:"https://asdasd.com",
-        articleCount:1,
-        followerCount:11,
-        followCount:111,
         nickName:"ChanHHOO",
-        webSite:"https://veloper.com",
         description:"hi there",
-        phoneNumber:"010-1234-6789",
-        sex:"male",
         createdAt:new Date(),
         updatedAt:new Date(),
+        private:false,
       }
     ])
   },
