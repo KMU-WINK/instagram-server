@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      //models.article.belongsTo(models.user, {foreignKey:"userId"})
+      models.article.belongsTo(models.user, {foreignKey:"user_id"})
+      models.article.hasMany(models.comment, {foreignKey:"article_id"})
+      models.article.hasMany(models.image, {foreignKey:"article_id"})
+
     }
   };
   article.init({

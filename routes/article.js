@@ -8,7 +8,7 @@ const secretObj = require("../config/jwt");
 
 
 const initialData = {
-    user_id:1,
+    userId:13,
     thumbnail:"http://beutifulImg.com",
     images:"test",
     location:"namyangju",
@@ -20,7 +20,7 @@ router.get("/upload", function(req, res, next){
 
     const token = req.cookies.user;
     const {
-        user_id,
+        userId,
         thumbnail, 
         location,
         content,
@@ -28,16 +28,19 @@ router.get("/upload", function(req, res, next){
 
     if(token){
         models.article.create({
-            user_id:user_id,
+            
             thumbnail:thumbnail,
             location:location,
             content:content,
+            createdAt:new Date(),
+            updatedAt:new Date(),
+            user_id:userId,
         })
         .then((user)=>{
             res.send(200)
         })
         .catch((err)=>{
-            res.send(403)
+            res.send(err)
         })
     }
     else{
@@ -49,12 +52,13 @@ router.get("/delete", function(req, res, next){
 
     const token = req.cookies.user;
 
-    const {articleId} = req.body || 3;
+    const {articleId, userId} = req.body || {articleId : 28, userId:13};
 
     if(token){
         models.article.destroy({
             where:{
                 id:articleId,
+                user_id:userId,
             }
         })
         .then((user) =>{
