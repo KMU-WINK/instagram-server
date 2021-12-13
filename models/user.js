@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model, BOOLEAN
+  Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
@@ -11,19 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.user.hasMany(models.artcle, {foreignKey:"user_id"});
+      models.user.hasMany(models.article, {foreignKey: 'fk_userId', onDelete: 'cascade', as:"fk_userId"});
     }
   };
   user.init({
     email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    password:DataTypes.STRING,
     userName: DataTypes.STRING,
     profileImg: DataTypes.STRING,
     nickName: DataTypes.STRING,
     description: DataTypes.STRING,
-    private:DataTypes.BOOLEAN,
-  }, 
-  {
+    private: DataTypes.BOOLEAN
+  }, {
     sequelize,
     modelName: 'user',
   });

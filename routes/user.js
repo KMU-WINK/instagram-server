@@ -49,6 +49,7 @@ router.get("/login", function(req, res, next){
         }
     })
     .then(user => {
+        console.log(user);
         if (!user){
             return res.status(403).json({
                 loginSuccess:false,
