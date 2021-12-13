@@ -20,6 +20,6 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     
-    await queryInterface.removeColumn("comments", "post_id");
+    await queryInterface.removeColumn("articles", "user_id");
   }
 };
