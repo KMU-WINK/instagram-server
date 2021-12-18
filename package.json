@@ -5,9 +5,18 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "cliapp": "^1.1.4",
+    "cookie-parser": "^1.4.5",
+    "global": "^4.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3-rc.0",
+    "sequelize": "^6.9.0",
+    "sequelize-cli": "^6.3.0",
+    "yarn": "^1.22.17"
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "nodemon": "^2.0.15",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.3.0"
   }
