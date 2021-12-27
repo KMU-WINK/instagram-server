@@ -18,65 +18,137 @@ const initialData = {
     phoneNumber:"010-1234-6789",
     private:false,
 }
-
 /**
  * @swagger
  * tags:
- *   name: Test
- *   description: 토큰 유효 검사
+ *   name: User
+ *   description: 유저 정보 처리
+ * definitions:
+ *   User:
+ *     type: "object"
+ *     properties:
+ *       email:
+ *         type: "string"
+ *       password:
+ *         type: "string"
+ *       userName:
+ *         type: "string"
+ *       profileImg:
+ *         type: "string"
+ *       nickname:
+ *         type: "string"
+ *       description:
+ *         type: "string"
+ *       private:
+ *         type: "integer"
+ *         form: "int64"
+ *       createdAt:
+ *         type: string
+ *         format: date
+ *       updatedAt:
+ *         type: string
+ *         format: date
+*/
+
+/**
+ * @swagger
+ * /auth/test:
+ *   get:
+ *    tags:
+ *    - User
+ *    description: 토큰 유효 검사
+ *    produces:
+ *    - application/json
+ *    responses:
+ *      200:
+ *        description: 권한이 있음
+ *      401:
+ *        description: 권한이 없음
  */
 //test get
 router.get("/test", function(req, res, next){
     const token = req.cookies.user;
     let decoded = null
     console.log(token)
+    
     if(token){
         decoded = jwt.verify(token, secretObj.secret);
     }
 
     if(decoded){
-        res.send("권한이 있네요")
+        res.json({
+            status: 200,
+            description: "권한이 있네요"
+        })
     }
     else{
-        res.send("권한이 없어요.")
+        res.json({
+            status: 401,
+            description: "권한이 없네요"
+        })
     }
 })
 
+
 //login get
-router.get("/login", function(req, res, next){
-    const token = jwt.sign({
-        email:"hpyho33@kookmin.ac.kr"
-    },
-    secretObj.secret,
-    {
-        expiresIn:"5m"
-    })
+// router.get("/login", function(req, res, next){
+//     const token = jwt.sign({
+//         email:"hpyho33@kookmin.ac.kr"
+//     },
+//     secretObj.secret,
+//     {
+//         expiresIn:"5m"
+//     })
 
-    models.user.findOne({
-        where:{
-            email:"hpyho33@kookmin.ac.kr"
-        }
-    })
-    .then(user => {
-        console.log(user);
-        if (!user){
-            return res.status(403).json({
-                loginSuccess:false,
-                message:"이메일이 없어요",
-            });
-        }
-        if(user.dataValues.password=== "test"){
-            res.cookie("user", token);
-            res.json({
-                token:token
-            })
-        }
-    })
-    .catch(err => {
-        res.status(500);
-    })
-});
+//     models.user.findOne({
+//         where:{
+//             email:"hpyho33@kookmin.ac.kr"
+//         }
+//     })
+//     .then(user => {
+//         console.log(user);
+//         if (!user){
+//             return res.status(403).json({
+//                 loginSuccess:false,
+//                 message:"이메일이 없어요",
+//             });
+//         }
+//         if(user.dataValues.password=== "test"){
+//             res.cookie("user", token);
+//             res.json({
+//                 token:token
+//             })
+//         }
+//     })
+//     .catch(err => {
+//         res.status(500);
+//     })
+// });
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *    tags:
+ *    - User
+ *    description: 로그인 (이메일 존재, 비밀번호 일치 검사), 토큰 생성
+ *    produces:
+ *    - application/json
+ *    parameters:
+ *      - in: body
+ *        name: user
+ *        description: 유저의 이메일과 비밀번호
+ *        schema:
+ *          type: object
+ *          required:
+ *            - email
+ *              password
+ *          properties:
+ *            email: 
+ *              type: string
+ *            password:
+ *              type: string
+ */
 //login post
 router.post("/login", function(req, res){
     let email = req.body.email;
@@ -102,14 +174,14 @@ router.post("/login", function(req, res){
             }
             else{
                 res.json({
-                    "status" : 405,
+                    "status" : 401,
                     "message" : "비밀번호가 틀렸습니다."
                     });
             }
         }
         else{
             res.json({
-                "status": 405,
+                "status": 401,
                 "message": "이메일이 존재하지 않습니다."
             });
         }
@@ -121,7 +193,19 @@ router.put("/login", function(req, res){res.sendStatus(405)})
 //login delete
 router.delete("/login", function(req, res){res.sendStatus(405)})
 
-
+/**
+ * @swagger
+ * /auth/logout:
+ *   get:
+ *    tags:
+ *    - User
+ *    description: 로그아웃(토큰 초기화)
+ *    produces:
+ *    - application/json
+ *    responses:
+ *      201:
+ *        description: 성공
+ */
 //logout get
 router.get("/logout", function(req, res, next){
     res.sendStatus(201);
