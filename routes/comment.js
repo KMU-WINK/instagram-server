@@ -8,6 +8,24 @@ const secretObj = require("../config/jwt");
 const comment = require("../models/comment");
 const article = require("../models/article");
 
+/**
+ * @swagger
+ *  /comment/{articleId}:
+ *    get:
+ *      tags:
+ *      - comments
+ *      description: 게시글의 댓글 조회
+ *      
+ *      parameters:
+ *        - in: path
+ *          name: articleId
+ *          required: true
+ *          description: 게시글 id
+ *      responses:
+ *       200:
+ *        description: 댓글 목록
+ */
+
 // 게시글 댓글 조회
 router.get("/:articleId",(req,res,next)=>{
     const articleId = req.params.articleId
@@ -28,6 +46,33 @@ router.get("/:articleId",(req,res,next)=>{
     })
 })
 
+
+/**
+ * @swagger
+ *  /comment/{articleId}:
+ *    post:
+ *      tags:
+ *      - comments
+ *      description: 게시글의 댓글 조회
+ *      Authorization: Bearer <token>
+ *      parameters:
+ *        - in: path
+ *          name: articleId
+ *          required: true
+ *          description: 게시글 id
+ *        - in: body
+ *          name: content
+ *          type: object
+ *          properties: 
+ *              content:
+ *                  type: string
+ *          description: 댓글 내용
+ *      responses:
+ *       201:
+ *        description: 작성 성공
+ *       400:
+ *        description: 댓글 내용 없음
+ */
 router.post("/:articleId", (req,res,next) =>{
     const content = req.body.content
     const articleId = req.params.articleId
@@ -95,6 +140,23 @@ router.post("/:articleId", (req,res,next) =>{
     
 })
 
+
+/**
+ * @swagger
+ *  /comment/{commentId}:
+ *    delete:
+ *      tags:
+ *      - comments
+ *      description: 댓글 삭제
+ *      
+ *      parameters:
+ *        - in: path
+ *          name: commentId
+ *          required: true
+ *          description: 게시글 id
+ *      responses:
+ *       204: 
+ */
 router.delete("/:commentId",(req,res,next) =>{
     const commentId = req.params.commentId
 
@@ -113,6 +175,34 @@ router.delete("/:commentId",(req,res,next) =>{
     })
 })
 
+/**
+ * @swagger
+ *  /comment/{commentId}:
+ *    put:
+ *      tags:
+ *      - comments
+ *      description: 게시글의 댓글 수정
+ *      
+ *      parameters:
+ *        - in: path
+ *          name: commentId
+ *          required: true
+ *          description: 게시글 id
+ *        - in: body
+ *          name: content
+ *          type: object
+ *          properties: 
+ *              content:
+ *                  type: string
+ *          description: 댓글 내용
+ *      responses:
+ *       201:
+ *        description: 댓글 업데이트 성공
+ *       400:
+ *        description: 댓글 내용 없음
+ */
+
+ // token 인증 구현 필요
 router.put("/:commentId",(req,res,next) =>{
     const commentId = req.params.commentId
     const content = req.body.content
