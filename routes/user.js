@@ -10,13 +10,14 @@ const bcrypt = require("bcrypt");
 
 const initialData = {
     email:"test",
-    password:"test",
-    userName:"test",
-    profileImg:"https://asdasd.com",
-    nickName:"test",
+    password:"update",
+    userName:"update",
+    profileImg:"https://update.com",
+    nickName:"update",
     description:"test",
-    phoneNumber:"010-1234-6789",
     private:false,
+    backgroundImage:"https://image.com",
+    themaColor:"#ff999",
 }
 /**
  * @swagger
@@ -229,8 +230,9 @@ router.get("/signup", function(req, res, next){
         profileImg,
         nickName,
         description,
-        phoneNumber,
         private,
+        backgroundImage,
+        themaColor,
     } = req.body || initialData;
     models.user.create({
         email:email,
@@ -239,10 +241,13 @@ router.get("/signup", function(req, res, next){
         profileImg:profileImg,
         nickName:nickName,
         description:description,
-        phoneNumber:phoneNumber,
         createdAt:new Date(),
         updatedAt:new Date(),
         private:private,
+        backgroundImage:backgroundImage,
+        themaColor:themaColor,
+        selectedCategory:{1:"#ui_ux", 2:"#programming", 3:"#instaRedesign"}
+        
     })
     .then((user)=>{
         res.sendStatus(201)
@@ -307,8 +312,6 @@ router.post("/signup", function(req, res, next){
             })
         }
     })
-
-    
 })
 //router put
 router.put("/signup", function(req,res,next){res.sendStatus(405)})
@@ -327,5 +330,33 @@ router.delete("/signup", function(req,res){res.sendStatus(405)})
 //        console.log("invalid token + ", token);
 //    }
 //})
+
+router.get("/update", function(req, res, next){
+    const token = req.cookies.user;
+
+    const id = req.body || 5;
+
+    const updatedProfile = req.body || initialData 
+    console.log(updatedProfile);
+    if (token) {
+        models.user.update({
+            nickName:updatedProfile.nickName,
+            description:updatedProfile.description,
+            email : updatedProfile.email,
+            phoneNumber : updatedProfile.phoneNumber,
+        },
+        {
+            where:{
+                id:id,
+        }}
+        )
+        .then(()=>[
+            res.send(200)
+        ])
+        .catch((err)=>{
+            res.send(err)
+        })
+    }
+})
 
 module.exports = router; 

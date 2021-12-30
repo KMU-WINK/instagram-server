@@ -21,7 +21,19 @@ module.exports = (sequelize, DataTypes) => {
     profileImg: DataTypes.STRING,
     nickName: DataTypes.STRING,
     description: DataTypes.STRING,
-    private: DataTypes.BOOLEAN
+    private: DataTypes.BOOLEAN,
+    backgroundImage: DataTypes.STRING,
+    themaColor: DataTypes.STRING,
+    selectedCategory:{
+      type : DataTypes.TEXT,
+      get: function () {
+        return JSON.parse(this.getDataValue('value'));
+      },
+      set: function (value) {
+        this.setDataValue('value', JSON.stringify(value));
+      },
+
+    },
   }, {
     sequelize,
     modelName: 'user',

@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // await queryInterface.addColumn("articles", "user_id", {
-    //   type: Sequelize.INTEGER,
-    // });
-    await queryInterface.addConstraint("articles", {
+    await queryInterface.addColumn("categories", "user_id", {
+      type: Sequelize.INTEGER,
+    });
+    await queryInterface.addConstraint("categories", {
       fields: ["user_id"],
       type: "foreign key",
-      name: "users_articles_id_fk",
+      name: "users_categorys_id_fk",
       references: {
         table: "users",
         field: "id",
@@ -19,7 +19,11 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    
-    await queryInterface.removeColumn("articles", "user_id");
+    /**
+     * Add reverting commands here.
+     *
+     * Example:
+     * await queryInterface.dropTable('users');
+     */
   }
 };
