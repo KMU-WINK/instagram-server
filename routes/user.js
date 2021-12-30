@@ -9,13 +9,14 @@ const secretObj = require("../config/jwt");
 
 const initialData = {
     email:"test",
-    password:"test",
-    userName:"test",
-    profileImg:"https://asdasd.com",
-    nickName:"test",
+    password:"update",
+    userName:"update",
+    profileImg:"https://update.com",
+    nickName:"update",
     description:"test",
-    phoneNumber:"010-1234-6789",
     private:false,
+    backgroundImage:"https://image.com",
+    themaColor:"#ff999",
 }
 
 router.get("/test", function(req, res, next){
@@ -79,8 +80,9 @@ router.get("/signup", function(req, res, next){
         profileImg,
         nickName,
         description,
-        phoneNumber,
         private,
+        backgroundImage,
+        themaColor,
     } = req.body || initialData;
 
     models.user.create({
@@ -90,17 +92,48 @@ router.get("/signup", function(req, res, next){
         profileImg:profileImg,
         nickName:nickName,
         description:description,
-        phoneNumber:phoneNumber,
         createdAt:new Date(),
         updatedAt:new Date(),
         private:private,
+        backgroundImage:backgroundImage,
+        themaColor:themaColor,
+        selectedCategory:{1:"#ui_ux", 2:"#programming", 3:"#instaRedesign"}
+        
     })
     .then((user)=>{
         res.send(200)
     })
     .catch((err)=>{
-        res.send(403)
+        res.send(err)
     })
+})
+
+router.get("/update", function(req, res, next){
+    const token = req.cookies.user;
+
+    const id = req.body || 5;
+
+    const updatedProfile = req.body || initialData 
+    console.log(updatedProfile);
+    if (token) {
+        models.user.update({
+            nickName:updatedProfile.nickName,
+            description:updatedProfile.description,
+            email : updatedProfile.email,
+            phoneNumber : updatedProfile.phoneNumber,
+        },
+        {
+            where:{
+                id:id,
+        }}
+        )
+        .then(()=>[
+            res.send(200)
+        ])
+        .catch((err)=>{
+            res.send(err)
+        })
+    }
 })
 
 module.exports = router; 

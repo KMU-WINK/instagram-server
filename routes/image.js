@@ -192,6 +192,4 @@ router.delete("/:imageId",(req,res,next) =>{
         res.send(err)
     })
 })
-
-
 module.exports = router; 

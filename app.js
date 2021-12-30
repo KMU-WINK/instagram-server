@@ -12,7 +12,6 @@ const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 
-// reqest에서 json 뽑을려고 썼습니다.
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
