@@ -2,9 +2,9 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // await queryInterface.addColumn("articles", "user_id", {
-    //   type: Sequelize.INTEGER,
-    // });
+    await queryInterface.addColumn("articles", "user_id", {
+      type: Sequelize.INTEGER,
+    });
     await queryInterface.addConstraint("articles", {
       fields: ["user_id"],
       type: "foreign key",
