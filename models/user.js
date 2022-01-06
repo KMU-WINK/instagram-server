@@ -26,16 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     private: DataTypes.BOOLEAN,
     backgroundImage: DataTypes.STRING,
     themaColor: DataTypes.STRING,
-    selectedCategory:{
-      type : DataTypes.TEXT,
-      get: function () {
-        return JSON.parse(this.getDataValue('value'));
-      },
-      set: function (value) {
-        this.setDataValue('value', JSON.stringify(value));
-      },
-
-    },
+    selectedCategory:DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'user',
