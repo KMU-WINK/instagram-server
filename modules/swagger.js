@@ -13,7 +13,7 @@ const options = {
 	},
 	apis: [
 		// Update TODO
-		// "./routes/*.js",
+		"./routes/*.js",
 		"./swagger/*",
 	],
 };
