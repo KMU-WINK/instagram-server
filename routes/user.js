@@ -26,29 +26,33 @@ const initialData = {
  *   description: 유저 정보 처리
  * definitions:
  *   User:
- *     type: "object"
- *     properties:
- *       email:
- *         type: "string"
- *       password:
- *         type: "string"
- *       userName:
- *         type: "string"
- *       profileImg:
- *         type: "string"
- *       nickname:
- *         type: "string"
- *       description:
- *         type: "string"
- *       private:
- *         type: "integer"
- *         form: "int64"
- *       createdAt:
- *         type: string
- *         format: date
- *       updatedAt:
- *         type: string
- *         format: date
+ *      type: "object"
+ *      properties:
+ *        email:
+ *          type: "string"
+ *        password:
+ *          type: "string"
+ *        userName:
+ *          type: "string"
+ *        profileImg:
+ *          type: "string"
+ *        nickname:
+ *          type: "string"
+ *        backgroundImage:
+ *          type: "string"
+ *        description:
+ *          type: "string"
+ *        private:
+ *          type: "integer"
+ *          form: "int64"
+ *        themaColor:
+ *          type: "string"
+ *        createdAt:
+ *          type: string
+ *          format: date
+ *        updatedAt:
+ *          type: string
+ *          format: date
 */
 
 /**
@@ -91,40 +95,7 @@ router.get("/test", function(req, res, next){
 })
 
 
-//login get
-// router.get("/login", function(req, res, next){
-//     const token = jwt.sign({
-//         email:"hpyho33@kookmin.ac.kr"
-//     },
-//     secretObj.secret,
-//     {
-//         expiresIn:"5m"
-//     })
 
-//     models.user.findOne({
-//         where:{
-//             email:"hpyho33@kookmin.ac.kr"
-//         }
-//     })
-//     .then(user => {
-//         console.log(user);
-//         if (!user){
-//             return res.status(403).json({
-//                 loginSuccess:false,
-//                 message:"이메일이 없어요",
-//             });
-//         }
-//         if(user.dataValues.password=== "test"){
-//             res.cookie("user", token);
-//             res.json({
-//                 token:token
-//             })
-//         }
-//     })
-//     .catch(err => {
-//         res.status(500);
-//     })
-// });
 
 /**
  * @swagger
@@ -148,6 +119,21 @@ router.get("/test", function(req, res, next){
  *            email: 
  *              type: string
  *            password:
+ *              type: string
+ *    responses:
+ *      401:
+ *        description: 입력오류
+ *        schema:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *      200:
+ *        description: 로그인 성공
+ *        schema:
+ *          type: object
+ *          properties:
+ *            token:
  *              type: string
  */
 //login post
@@ -189,10 +175,6 @@ router.post("/login", function(req, res){
         console.log(user);
     })
 })
-//login put
-router.put("/login", function(req, res){res.sendStatus(405)})
-//login delete
-router.delete("/login", function(req, res){res.sendStatus(405)})
 
 /**
  * @swagger
@@ -204,25 +186,69 @@ router.delete("/login", function(req, res){res.sendStatus(405)})
  *    produces:
  *    - application/json
  *    responses:
- *      201:
+ *      200:
  *        description: 성공
  */
 //logout get
 router.get("/logout", function(req, res, next){
-    res.sendStatus(201);
     return res.cookie("user", "").json({logoutSuccess:true})
 })
-//logout post
-router.post("/logout", function(req,res){res.sendStatus(405)})
-//logout put
-router.put("/logout", function(req,res){res.sendStatus(405)})
-//logout delete
-router.delete("/logout", function(req,res){res.sendStatus(405)})
 
-
-
-//signup get
-router.get("/signup", function(req, res, next){
+/**
+ * @swagger
+ * /auth/signup:
+ *   post:
+ *    tags:
+ *    - User
+ *    description: 회원가입
+ *    produces:
+ *    - application/json
+ *    parameters:
+ *      - in: body
+ *        name: user
+ *        description: 유저의 이메일과 비밀번호
+ *        schema:
+ *          type: object
+ *          required:
+ *            - email
+ *              password
+ *              userName
+ *              profileImg
+ *              nickName
+ *              description
+ *              private
+ *              backgroundImage
+ *              themaColor
+ *              
+ *          properties:           
+ *            email: 
+ *              type: string
+ *            password:
+ *              type: string
+ *            userName:
+ *              type: string
+ *            profileImg:
+ *              type: string
+ *            nickName:
+ *              type: string
+ *            description:
+ *              type: string
+ *            private:
+ *              type: boolean
+ *            backgroundImage:
+ *              type: string
+ *            themaColor:
+ *              type: string
+ *    
+ *    responces:
+ *      403:
+ *        description: 이미 존재하는 아이디
+ *      201:
+ *        description:  정상적으로 생성
+ * 
+ */
+//signup post
+router.post("/signup", function(req, res, next){
     const {
         email,
         password,
@@ -234,45 +260,7 @@ router.get("/signup", function(req, res, next){
         backgroundImage,
         themaColor,
     } = req.body || initialData;
-    models.user.create({
-        email:email,
-        password:password,
-        userName:userName,
-        profileImg:profileImg,
-        nickName:nickName,
-        description:description,
-        createdAt:new Date(),
-        updatedAt:new Date(),
-        private:private,
-        backgroundImage:backgroundImage,
-        themaColor:themaColor,
-        selectedCategory:{1:"#ui_ux", 2:"#programming", 3:"#instaRedesign"}
-        
-    })
-    .then((user)=>{
-        res.sendStatus(201)
-    })
-    .catch((err)=>{
-        res.sendStatus(403)
-    })
-})
-
-//signup post
-router.post("/signup", function(req, res, next){
-    const {
-        email,
-        password,
-        userName,
-        profileImg,
-        nickName,
-        description,
-        phoneNumber,
-        private,
-    } = req.body || initialData;
-
-    
-
-    models.user.findOne({
+        models.user.findOne({
         where:{
             email: email
         }
@@ -284,10 +272,6 @@ router.post("/signup", function(req, res, next){
                 "message": "이미 존재하는 아이디입니다."
             });
         }
-        //empty 프론트엔드에서 처리할 것 같아서 주석처리했습니다.
-        //else if(!email){
-        //    res.send(405+"\n 이메일을 적어주세요");
-        //}
         else{
             let encryptedPW = bcrypt.hashSync(password,10);
             console.log(encryptedPW);
@@ -299,10 +283,13 @@ router.post("/signup", function(req, res, next){
                 profileImg:profileImg,
                 nickName:nickName,
                 description:description,
-                phoneNumber:phoneNumber,
                 createdAt:new Date(),
                 updatedAt:new Date(),
                 private:private,
+                backgroundImage:backgroundImage,
+                themaColor:themaColor,
+                selectedCategory:{1:"#ui_ux", 2:"#programming", 3:"#instaRedesign"}
+                
             })
             .then((user)=>{
                 res.sendStatus(201)
@@ -312,24 +299,10 @@ router.post("/signup", function(req, res, next){
             })
         }
     })
+    
 })
-//router put
-router.put("/signup", function(req,res,next){res.sendStatus(405)})
-//router delete
-router.delete("/signup", function(req,res){res.sendStatus(405)})
 
 
-//middle ware : before run method, check whether is token invalid, 이 뒤에 있는 메소드들은 미들웨어를 거침 
-//router.use("/*", function(req, res, next){
-//    console.log("enter middleware");
-//    const token = req.cookies.user;
-//    try{
-//        jwt.verify(token, secretObj.secret);
-//        next();
-//    }catch{
-//        console.log("invalid token + ", token);
-//    }
-//})
 
 router.get("/update", function(req, res, next){
     const token = req.cookies.user;
