@@ -172,7 +172,6 @@ router.post("/login", function(req, res){
                 "message": "이메일이 존재하지 않습니다."
             });
         }
-        console.log(user);
     })
 })
 
@@ -267,10 +266,7 @@ router.post("/signup", function(req, res, next){
     }).then(user => {
         //email already exist
         if(user){
-            res.json({
-                "status": 405,
-                "message": "이미 존재하는 아이디입니다."
-            });
+            res.status(405).json({error: "이미 존재하는 아이디입니다."});
         }
         else{
             let encryptedPW = bcrypt.hashSync(password,10);
@@ -295,7 +291,7 @@ router.post("/signup", function(req, res, next){
                 res.sendStatus(201)
             })
             .catch((err)=>{
-                res.sendStatus(403)
+                res.status(403).json({error: "생성 실패"});
             })
         }
     })

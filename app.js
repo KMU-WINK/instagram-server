@@ -9,6 +9,7 @@ const article = require('./routes/article');
 const comment = require('./routes/comment');
 const image = require('./routes/image');
 const cookieParser = require("cookie-parser");
+const { verifyToken } = require("./routes/authorization");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,11 +21,11 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/auth', user);
 
-app.use("/article", article);
+app.use("/article", verifyToken, article);
 
-app.use("/comment", comment);
+app.use("/comment", verifyToken, comment);
 
-app.use("/image", image);
+app.use("/image", verifyToken, image);
 
 // API Server Docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
