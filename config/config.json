@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "sung980327",
-    "port":3307,
+    "password": "kjs751300@@aa",
+    "port":3306,
     "database": "instagramRedesign",
     "host": "127.0.0.1",
     "dialect": "mysql"

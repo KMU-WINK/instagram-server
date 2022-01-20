@@ -8,6 +8,7 @@ const user = require('./routes/user');
 const article = require('./routes/article');
 const comment = require('./routes/comment');
 const image = require('./routes/image');
+const businessCard = require('./routes/businessCard');
 const cookieParser = require("cookie-parser");
 
 app.use(express.json());
@@ -25,6 +26,8 @@ app.use("/article", article);
 app.use("/comment", comment);
 
 app.use("/image", image);
+
+app.use("/businessCard", businessCard);
 
 // API Server Docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
