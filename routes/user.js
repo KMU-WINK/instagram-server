@@ -9,11 +9,7 @@ const secretObj = require("../config/jwt");
 const bcrypt = require("bcrypt");
 
 const initialData = {
-    email:"test",
-    password:"update",
-    userName:"update",
     profileImg:"https://update.com",
-    nickName:"update",
     description:"test",
     private:false,
     backgroundImage:"https://image.com",
@@ -252,13 +248,17 @@ router.post("/signup", function(req, res, next){
         email,
         password,
         userName,
-        profileImg,
         nickName,
+    } = req.body || initialData;
+
+    const {
         description,
         private,
         backgroundImage,
         themaColor,
-    } = req.body || initialData;
+        profileImg,
+    } = initialData;
+
         models.user.findOne({
         where:{
             email: email
@@ -284,8 +284,6 @@ router.post("/signup", function(req, res, next){
                 private:private,
                 backgroundImage:backgroundImage,
                 themaColor:themaColor,
-                selectedCategory:{1:"#ui_ux", 2:"#programming", 3:"#instaRedesign"}
-                
             })
             .then((user)=>{
                 res.sendStatus(201)
