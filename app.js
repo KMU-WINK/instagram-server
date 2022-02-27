@@ -8,6 +8,7 @@ const user = require('./routes/user');
 const article = require('./routes/article');
 const comment = require('./routes/comment');
 const image = require('./routes/image');
+const category = require("./routes/category");
 const businessCard = require('./routes/businessCard');
 const cookieParser = require("cookie-parser");
 const { verifyToken } = require("./routes/authorization");
@@ -29,6 +30,8 @@ app.use("/comment", verifyToken, comment);
 app.use("/image", verifyToken, image);
 
 app.use("/businessCard", businessCard);
+
+app.use("/category", verifyToken, category);
 
 // API Server Docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

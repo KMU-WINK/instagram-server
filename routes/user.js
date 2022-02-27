@@ -142,7 +142,7 @@ router.post("/login", function(req, res){
     },
     secretObj.secret,
     {
-        expiresIn:"5m"
+        expiresIn:"20m"
     })
 
     models.user.findOne({

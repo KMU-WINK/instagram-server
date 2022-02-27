@@ -11,11 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.comment.belongsTo(models.user, {foreignKey:"user_id"})
+      models.category.belongsTo(models.user, {foreignKey:"user_id"})
     }
   };
   category.init({
-    title: DataTypes.STRING
+    title: DataTypes.STRING,
+    articles: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'category',
