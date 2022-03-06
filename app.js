@@ -6,11 +6,6 @@ const app = express();
 
 const cors = require("cors");
 
-const corsOptions = {
-	origin: "http://www.redesigninsta.kro.kr/",
-	optionsSuccessStatus: 200,
-};
-
 const port = 3000;
 const user = require("./routes/user");
 const article = require("./routes/article");
@@ -26,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use("/auth", user);
 
