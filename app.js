@@ -1,15 +1,23 @@
 const express = require("express");
 
-const { swaggerUi, specs } = require('./modules/swagger');
+const { swaggerUi, specs } = require("./modules/swagger");
 
 const app = express();
+
+const cors = require("cors");
+
+const corsOptions = {
+	origin: "http://www.redesigninsta.kro.kr/",
+	optionsSuccessStatus: 200,
+};
+
 const port = 3000;
-const user = require('./routes/user');
-const article = require('./routes/article');
-const comment = require('./routes/comment');
-const image = require('./routes/image');
+const user = require("./routes/user");
+const article = require("./routes/article");
+const comment = require("./routes/comment");
+const image = require("./routes/image");
 const category = require("./routes/category");
-const businessCard = require('./routes/businessCard');
+const businessCard = require("./routes/businessCard");
 const cookieParser = require("cookie-parser");
 const { verifyToken } = require("./routes/authorization");
 
@@ -18,10 +26,9 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(cors(corsOptions));
 
-app.use('/auth', user);
+app.use("/auth", user);
 
 app.use("/article", verifyToken, article);
 
@@ -34,7 +41,7 @@ app.use("/businessCard", businessCard);
 app.use("/category", verifyToken, category);
 
 // API Server Docs
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get("/", (req, res) => {
 	res.send("aa");
