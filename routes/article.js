@@ -80,6 +80,27 @@ router.get("/users/:userId", (req, res, next) => {
     });
 });
 
+router.get("/", (req, res, next) => {
+
+    models.article.findAll()
+        .then((article) => {
+            if (article.length !== 0) {
+                res.status(200).json({
+                    articles: article
+                })
+            }
+            else {
+                res.status(404).json({
+                    message: "게시글이 존재하지 않습니다."
+                })
+            }
+
+        })
+        .catch((err) => {
+            res.send(err);
+        });
+});
+
 /**
  * @swagger
  * /article/{id}:

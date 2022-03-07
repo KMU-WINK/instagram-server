@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 let corsOptions = {
-	origin: "http://www.redesigninsta.kro.kr/",
+	origin: "http://www.redesigninsta.kro.kr",
 	credentials: true,
 };
 

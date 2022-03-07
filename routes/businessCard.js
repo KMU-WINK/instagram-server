@@ -128,12 +128,12 @@ router.get("/:userId", (req, res, next) => {
 	models.user
 		.findOne({
 			where: { id: req.params.userId },
-			order: [["createdAt", "DESC"]],
 		})
 		.then((user) => {
 			models.businessCard
 				.findOne({
 					where: { user_id: user.id },
+					order: [["createdAt", "DESC"]],
 				})
 				.then((image) => {
 					res.sendFile(path.resolve(__dirname + "/../images/" + image.dataValues.frontImg));

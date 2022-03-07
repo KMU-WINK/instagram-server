@@ -13,7 +13,7 @@ const initialData = {
     description:"test",
     private:false,
     backgroundImage:"https://image.com",
-    themaColor:"#ff999",
+    themaColor:"light-Original-Original",
 }
 /**
  * @swagger
@@ -91,6 +91,65 @@ router.get("/test", function(req, res, next){
 })
 
 
+/**
+ * @swagger
+ * /auth/test:
+ *   get:
+ *    tags:
+ *    - User
+ *    description: 유저 정보 갖고오기
+ *    produces:
+ *    - application/json
+ *    responses:
+ *      200:
+ *        description: user 객체 반환
+ *      401:
+ *        description: 에러.
+ */
+router.get("/:userId", function(req, res, next){
+    models.user.findOne({
+        where:{
+            id:req.params.userId
+        }
+    }).then(user=>{
+        res.json({user:user})
+    })
+})
+/**
+ * @swagger
+ * /auth/test:
+ *   get:
+ *    tags:
+ *    - User
+ *    description: 토큰으로 유저정보 갖고오기 (내 정보)
+ *    produces:
+ *    - application/json
+ *    responses:
+ *      200:
+ *        description: email 리턴
+ *      401:
+ *        description: 권한이 없음
+ */
+router.get("/get/me", function(req, res, next){
+    const token = req.cookies.user; // 토큰 인증 없는 상태로 구현
+    const decoded = jwt.verify(token, secretObj.secret);
+
+    if (decoded) {
+        models.user.findOne({
+            where:{
+                email:decoded.email
+            }
+        }).then((user)=>{
+            res.json({user:user})
+        })
+        
+
+    }
+    else {
+        res.status(401).json({ error: 'unauthorized' });
+    }
+})
+
 
 
 /**
@@ -142,7 +201,7 @@ router.post("/login", function(req, res){
     },
     secretObj.secret,
     {
-        expiresIn:"20m"
+        expiresIn:"10800m"
     })
 
     models.user.findOne({
