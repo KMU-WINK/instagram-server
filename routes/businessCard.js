@@ -125,6 +125,7 @@ router.post("/:userId", upload.array('file'),(req, res, next) => {
 
 // 명함 조회
 router.get("/:userId", (req, res, next) => {
+    // res.header("Access-Control-Allow-Origin", "*")
     models.user.findOne({
         where:{id:req.params.userId}
     })
