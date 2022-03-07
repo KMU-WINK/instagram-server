@@ -135,7 +135,15 @@ router.get("/get/me", function(req, res, next){
     const decoded = jwt.verify(token, secretObj.secret);
 
     if (decoded) {
-        res.json({email:decoded.email})
+        models.user.findOne({
+            where:{
+                email:decoded.email
+            }
+        }).then((user)=>{
+            res.json({user:user})
+        })
+        
+
     }
     else {
         res.status(401).json({ error: 'unauthorized' });
