@@ -21,12 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
-app.use(
-	cors({
-		origin: "http://localhost:9000", // 출처 허용 옵션
-		credential: "true",
-	})
-);
+app.use(cors({ credentials: true, origin: true }));
 
 app.use("/auth", user);
 
