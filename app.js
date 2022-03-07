@@ -21,7 +21,12 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
-app.use(cors({ credentials: true, origin: "http://localhost:9000" }));
+let corsOptions = {
+	origin: "http://www.redesigninsta.kro.kr/",
+	credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use("/auth", user);
 
