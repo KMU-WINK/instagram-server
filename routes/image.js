@@ -57,21 +57,30 @@ router.post("/:articleId", upload.single("img"), (req, res) => {
 
 	const articleId = req.params.articleId;
 	console.log(articleId);
-	models.image
-		.create({
-			url: `/images/${req.file.filename}`,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			article_id: articleId,
+
+	models.article
+		.findOne({
+			where: {
+				id: articleId,
+			},
 		})
-		.then((image) => {
-			res.status(201).json({
-				message: "success save image",
-				image,
-			});
-		})
-		.catch((err) => {
-			res.send(err);
+		.then((article) => {
+			models.image
+				.create({
+					url: `/images/${req.file.filename}`,
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					article_id: article.dataValues.id,
+				})
+				.then((image) => {
+					res.status(201).json({
+						message: "success save image",
+						image,
+					});
+				})
+				.catch((err) => {
+					res.send(err);
+				});
 		});
 });
 
