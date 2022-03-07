@@ -56,6 +56,7 @@ router.post("/:articleId", upload.single("img"), (req, res) => {
 	// console.log(req.files)
 
 	const articleId = req.params.articleId;
+	console.log(articleId);
 	models.image
 		.create({
 			url: `/images/${req.file.filename}`,
@@ -63,9 +64,10 @@ router.post("/:articleId", upload.single("img"), (req, res) => {
 			updatedAt: new Date(),
 			article_id: articleId,
 		})
-		.then((user) => {
+		.then((image) => {
 			res.status(201).json({
 				message: "success save image",
+				image,
 			});
 		})
 		.catch((err) => {
@@ -93,16 +95,18 @@ router.post("/:articleId", upload.single("img"), (req, res) => {
 router.get("/:articleId", (req, res, next) => {
 	const articleId = req.params.articleId;
 
+	console.log(articleId);
+
 	models.image
 		.findAll({
 			where: {
 				article_id: articleId,
 			},
 		})
-		.then((user) => {
-			console.log(user);
+		.then((images) => {
+			console.log(images);
 			res.status(200).json({
-				comments: user,
+				images: images,
 			});
 		})
 		.catch((err) => {
