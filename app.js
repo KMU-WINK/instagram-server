@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use(
 	cors({
-		origin: "*", // 출처 허용 옵션
+		origin: "http://localhost:9000", // 출처 허용 옵션
 		credential: "true",
 	})
 );
