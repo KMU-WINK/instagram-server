@@ -90,6 +90,15 @@ router.get("/test", function(req, res, next){
     }
 })
 
+router.get("/:userId", function(req, res, next){
+    models.user.findOne({
+        where:{
+            id:req.params.userId
+        }
+    }).then(user=>{
+        res.json({user:user})
+    })
+})
 
 
 
