@@ -21,10 +21,12 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
-app.use(cors({
-	origin: '*',
-	credentials: true
-}));
+app.use(
+	cors({
+		origin: "*", // 출처 허용 옵션
+		credential: "true",
+	})
+);
 
 app.use("/auth", user);
 
