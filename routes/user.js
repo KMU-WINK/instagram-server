@@ -1,4 +1,3 @@
-
 const express = require("express");
 const models = require("../models");
 
@@ -9,12 +8,12 @@ const secretObj = require("../config/jwt");
 const bcrypt = require("bcrypt");
 
 const initialData = {
-    profileImg:"https://update.com",
-    description:"test",
-    private:false,
-    backgroundImage:"https://image.com",
-    themaColor:"light-Original-Original",
-}
+	profileImg: "https://update.com",
+	description: "test",
+	private: false,
+	backgroundImage: "https://image.com",
+	themaColor: "light-Original-Original",
+};
 /**
  * @swagger
  * tags:
@@ -49,7 +48,7 @@ const initialData = {
  *        updatedAt:
  *          type: string
  *          format: date
-*/
+ */
 
 /**
  * @swagger
@@ -67,29 +66,27 @@ const initialData = {
  *        description: 권한이 없음
  */
 //test get
-router.get("/test", function(req, res, next){
-    const token = req.cookies.user;
-    let decoded = null
-    console.log(token)
-    
-    if(token){
-        decoded = jwt.verify(token, secretObj.secret);
-    }
+router.get("/test", function (req, res, next) {
+	const token = req.cookies.user;
+	let decoded = null;
+	console.log(token);
 
-    if(decoded){
-        res.json({
-            status: 200,
-            description: "권한이 있네요"
-        })
-    }
-    else{
-        res.json({
-            status: 401,
-            description: "권한이 없네요"
-        })
-    }
-})
+	if (token) {
+		decoded = jwt.verify(token, secretObj.secret);
+	}
 
+	if (decoded) {
+		res.json({
+			status: 200,
+			description: "권한이 있네요",
+		});
+	} else {
+		res.json({
+			status: 401,
+			description: "권한이 없네요",
+		});
+	}
+});
 
 /**
  * @swagger
@@ -106,15 +103,17 @@ router.get("/test", function(req, res, next){
  *      401:
  *        description: 에러.
  */
-router.get("/:userId", function(req, res, next){
-    models.user.findOne({
-        where:{
-            id:req.params.userId
-        }
-    }).then(user=>{
-        res.json({user:user})
-    })
-})
+router.get("/:userId", function (req, res, next) {
+	models.user
+		.findOne({
+			where: {
+				id: req.params.userId,
+			},
+		})
+		.then((user) => {
+			res.json({ user: user });
+		});
+});
 /**
  * @swagger
  * /auth/test:
@@ -130,27 +129,24 @@ router.get("/:userId", function(req, res, next){
  *      401:
  *        description: 권한이 없음
  */
-router.get("/get/me", function(req, res, next){
-    const token = req.cookies.user; // 토큰 인증 없는 상태로 구현
-    const decoded = jwt.verify(token, secretObj.secret);
+router.get("/get/me", function (req, res, next) {
+	const token = req.cookies.user; // 토큰 인증 없는 상태로 구현
+	const decoded = jwt.verify(token, secretObj.secret);
 
-    if (decoded) {
-        models.user.findOne({
-            where:{
-                email:decoded.email
-            }
-        }).then((user)=>{
-            res.json({user:user})
-        })
-        
-
-    }
-    else {
-        res.status(401).json({ error: 'unauthorized' });
-    }
-})
-
-
+	if (decoded) {
+		models.user
+			.findOne({
+				where: {
+					email: decoded.email,
+				},
+			})
+			.then((user) => {
+				res.json({ user: user });
+			});
+	} else {
+		res.status(401).json({ error: "unauthorized" });
+	}
+});
 
 /**
  * @swagger
@@ -171,7 +167,7 @@ router.get("/get/me", function(req, res, next){
  *            - email
  *              password
  *          properties:
- *            email: 
+ *            email:
  *              type: string
  *            password:
  *              type: string
@@ -192,43 +188,45 @@ router.get("/get/me", function(req, res, next){
  *              type: string
  */
 //login post
-router.post("/login", function(req, res){
-    let email = req.body.email;
-    let password = req.body.password;
+router.post("/login", function (req, res) {
+	let email = req.body.email;
+	let password = req.body.password;
 
-    const token = jwt.sign({
-        email: email
-    },
-    secretObj.secret,
-    {
-        expiresIn:"10800m"
-    })
+	const token = jwt.sign(
+		{
+			email: email,
+		},
+		secretObj.secret,
+		{
+			expiresIn: "10800m",
+		}
+	);
 
-    models.user.findOne({
-        where:{
-            email: email
-        }
-    }).then(user => {
-        if(user){
-            if(bcrypt.compareSync(password, user.dataValues.password)){     
-                res.cookie("user", token);
-                res.json({token: token});
-            }
-            else{
-                res.json({
-                    "status" : 401,
-                    "message" : "비밀번호가 틀렸습니다."
-                    });
-            }
-        }
-        else{
-            res.json({
-                "status": 401,
-                "message": "이메일이 존재하지 않습니다."
-            });
-        }
-    })
-})
+	models.user
+		.findOne({
+			where: {
+				email: email,
+			},
+		})
+		.then((user) => {
+			if (user) {
+				if (bcrypt.compareSync(password, user.dataValues.password)) {
+					res.cookie("user", token);
+					res.json({ token: token });
+				} else {
+					res.json({
+						status: 401,
+						message: "비밀번호가 틀렸습니다.",
+					});
+				}
+			} else {
+				res.json({
+					status: 401,
+					message: "이메일이 존재하지 않습니다.",
+				});
+			}
+		});
+});
 
 /**
  * @swagger
@@ -244,9 +242,9 @@ router.post("/login", function(req, res){
  *        description: 성공
  */
 //logout get
-router.get("/logout", function(req, res, next){
-    return res.cookie("user", "").json({logoutSuccess:true})
-})
+router.get("/logout", function (req, res, next) {
+	return res.cookie("user", "").json({ logoutSuccess: true });
+});
 
 /**
  * @swagger
@@ -273,9 +271,9 @@ router.get("/logout", function(req, res, next){
  *              private
  *              backgroundImage
  *              themaColor
- *              
- *          properties:           
- *            email: 
+ *
+ *          properties:
+ *            email:
  *              type: string
  *            password:
  *              type: string
@@ -293,96 +291,82 @@ router.get("/logout", function(req, res, next){
  *              type: string
  *            themaColor:
  *              type: string
- *    
+ *
  *    responces:
  *      403:
  *        description: 이미 존재하는 아이디
  *      201:
  *        description:  정상적으로 생성
- * 
+ *
  */
 //signup post
-router.post("/signup", function(req, res, next){
-    const {
-        email,
-        password,
-        userName,
-        nickName,
-    } = req.body || initialData;
+router.post("/signup", function (req, res, next) {
+	const { email, password, userName, nickName } = req.body || initialData;
 
-    const {
-        description,
-        private,
-        backgroundImage,
-        themaColor,
-        profileImg,
-    } = initialData;
+	const { description, private, backgroundImage, themaColor, profileImg } = initialData;
 
-        models.user.findOne({
-        where:{
-            email: email
-        }
-    }).then(user => {
-        //email already exist
-        if(user){
-            res.status(405).json({error: "이미 존재하는 아이디입니다."});
-        }
-        else{
-            let encryptedPW = bcrypt.hashSync(password,10);
-            console.log(encryptedPW);
-        
-            models.user.create({
-                email:email,
-                password:encryptedPW,
-                userName:userName,
-                profileImg:profileImg,
-                nickName:nickName,
-                description:description,
-                createdAt:new Date(),
-                updatedAt:new Date(),
-                private:private,
-                backgroundImage:backgroundImage,
-                themaColor:themaColor,
-            })
-            .then((user)=>{
-                res.sendStatus(201)
-            })
-            .catch((err)=>{
-                res.status(403).json({error: "생성 실패"});
-            })
-        }
-    })
-    
-})
+	models.user
+		.findOne({
+			where: {
+				email: email,
+			},
+		})
+		.then((user) => {
+			//email already exist
+			if (user) {
+				res.status(405).json({ error: "이미 존재하는 아이디입니다." });
+			} else {
+				let encryptedPW = bcrypt.hashSync(password, 10);
+				console.log(encryptedPW);
 
+				models.user
+					.create({
+						email: email,
+						password: encryptedPW,
+						userName: userName,
+						profileImg: profileImg,
+						nickName: nickName,
+						description: description,
+						createdAt: new Date(),
+						updatedAt: new Date(),
+						private: private,
+						backgroundImage: backgroundImage,
+						themaColor: themaColor,
+					})
+					.then((user) => {
+						res.sendStatus(201);
+					})
+					.catch((err) => {
+						res.status(403).json({ error: "생성 실패" });
+					});
+			}
+		});
+});
 
+router.put("/:userId", function (req, res, next) {
+	const token = req.cookies.user;
 
-router.get("/update", function(req, res, next){
-    const token = req.cookies.user;
+	const id = req.params.userId;
 
-    const id = req.body || 5;
+	const themaColor = req.body.themaColor;
 
-    const updatedProfile = req.body || initialData 
-    console.log(updatedProfile);
-    if (token) {
-        models.user.update({
-            nickName:updatedProfile.nickName,
-            description:updatedProfile.description,
-            email : updatedProfile.email,
-            phoneNumber : updatedProfile.phoneNumber,
-        },
-        {
-            where:{
-                id:id,
-        }}
-        )
-        .then(()=>[
-            res.send(200)
-        ])
-        .catch((err)=>{
-            res.send(err)
-        })
-    }
-})
+	if (token) {
+		models.user
+			.update(
+				{
+					themaColor,
+				},
+				{
+					where: {
+						id: id,
+					},
+				}
+			)
+			.then(() => [res.send(200)])
+			.catch((err) => {
+				res.send(err);
+			});
+	}
+});
 
-module.exports = router; 
+module.exports = router;
